@@ -1,18 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import { Navbar , NavbarBrand} from 'reactstrap';
+import Menu from './components/Menucompo';
+import Dish from './components/Dishdetails';
+import { DISHES } from './shared/Dishes';
 import './App.css';
+import { render } from '@testing-library/react';
+import Main from './components/Maincomponent'
 
-function App() {
+class App extends Component {
+  constructor(props){
+    super(props);}
+  render() {
   return (
     <div className="App">
-      <Navbar dark color="primary">
-        <div className="container">
-            <NavbarBrand href="/">Ristorante Con Fusion</NavbarBrand>
-        </div>
-      </Navbar>
+        <Main />
     </div>
   );
+}
 }
 
 export default App;
