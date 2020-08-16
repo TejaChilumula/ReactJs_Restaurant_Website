@@ -1,3 +1,4 @@
+import React , { Component} from 'react';
 import { Nav, Navbar, NavbarBrand, NavbarToggler, Collapse, NavItem, Jumbotron } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 
@@ -56,3 +57,4 @@ class Header extends Component {
         );
     }
 }
+export default Header;

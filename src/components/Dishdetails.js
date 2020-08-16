@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Media } from 'reactstrap';
-import { Card ,CardImg ,CardText , CardBody,CardTitle, CardImgOverlay } from 'reactstrap';
+import { Card ,CardImg ,CardText , CardBody,CardTitle, CardImgOverlay, Breadcrumb , BreadcrumbItem} from 'reactstrap';
 import Menu from './Menucompo';
+import {Link } from 'react-router-dom';
 import { unstable_renderSubtreeIntoContainer } from 'react-dom';
 
     function  RenderDish({dish}) {
@@ -60,10 +60,23 @@ import { unstable_renderSubtreeIntoContainer } from 'react-dom';
         const Dishdetail = (props) => {
             if(props.dish!=null){
             return(
+                <div className="container">
+                     <div className="row">
+            <Breadcrumb>
+                <BreadcrumbItem> <Link to='/menu'>Menu</Link> </BreadcrumbItem>
+                <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
+            </Breadcrumb>
+            <div className="col-12">
+                <h3>
+                    {props.dish.name}
+                </h3>
+                <hr />
+            </div>
+            </div>
                 <div className="row">
                     < RenderDish dish={props.dish}/> 
-                    < Rendercomments comments = {props.dish.comments} />
-                    
+                    < Rendercomments comments = {props.comments} />
+                    </div>
                 </div>
             );}
         else{
