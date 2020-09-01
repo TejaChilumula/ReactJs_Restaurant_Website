@@ -1,184 +1,162 @@
 import React, { Component } from 'react';
-import { Card ,CardImg ,CardText , CardBody,CardTitle, CardImgOverlay, Breadcrumb , BreadcrumbItem, Col,Row,Button,Label,Modal ,ModalBody,ModalHeader} from 'reactstrap';
-import Menu from './Menucompo';
-import {Link } from 'react-router-dom';
-import { unstable_renderSubtreeIntoContainer } from 'react-dom';
-import {Control,LocalForm,Errors,values} from 'react-redux-form';
+import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem, 
+    Button, Modal, ModalHeader, ModalBody, Row, Label, Col } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import { Control, LocalForm, Errors } from 'react-redux-form';
 
-    function  RenderDish({dish}) {
-                if (dish != null)
-                    return(
-                        <div className="col-12 col-md-5 m-1">
-                        
-                        <Card>
-                            <CardImg top src={dish.image} alt={dish.name} />
-                            <CardBody>
-                                <div className="text-left">
-                            <CardTitle>{dish.name}</CardTitle>
-                            <CardText>{dish.description}</CardText>
-                            </div>
-                            </CardBody>
-                        </Card>
-                        </div>
-                    );
-                else{
-                    return(
-                        <div></div>
-                    );}}
+const maxLength = (len) => (val) => !(val) || (val.length <= len)
+const minLength = (len) => (val) => (val) && (val.length >= len)
 
-    function    Rendercomments({comments}){
-                    if(comments!=null)
-                    {
-                        return(
-                    <div className="col-12 col-md-5">
-                        <h4 className="text-left">Comments</h4>
-                        <ul className="unstyled-list text-left">
-                            {comments.map((comment)=>{
-                        return(
-                            
-                            <ul className="text-left">
+function RenderDish({dish}) {
+    return(
+        <div className="col-12 col-md-5 m-1">
+            <Card>
+                <CardImg width="100%" src={dish.image} alt={dish.name}/>
+                <CardBody>
+                    <CardTitle>{dish.name}</CardTitle>
+                    <CardText>{dish.description}</CardText>
+                </CardBody>
+            </Card>
+        </div>     
+    );
+}
 
-                                {comment.comment}
-                                <br /><br />
-                                --{comment.author} ,{new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).format(new Date(Date.parse(comment.date)))}
-                                <br /><br />
-                            </ul>
-                            );
+function RenderComments({comments}) {
 
-                            })}
-                        </ul>
-                        <CommentForm />
-                        </div>
-                    )}
-                    else{
-                            return(
-                                <div></div>
-                            );
-                        }}
-
-            class CommentForm extends Component{
-                constructor(props){
-                    super(props);
-                    this.state = {
-                        isNavOpen:'false',
-                        isModalOpn:'false'
-                    }
-
-                this.toggleModl = this.toggleModl.bind(this);
-                this.hndlsubmit=this.hndlsubmit.bind(this);
-                }
-            
-                toggleModl(){
-                    this.setState({
-                        isModalOpn :!this.state.isModalOpn
-                    });
-                }
-                hndlsubmit(values){
-                    this.toggleModl();
-                    console.log('Current State is:'+ JSON.stringify(values));
-                    alert('Current state is: '+JSON.stringify(values));
-                }
-
-                render(){
-                    const required = (val) => val && val.length;
-                    const maxLength = (len) => (val) => !(val) || (val.length <= len);
-                    const minLength = (len) => (val) => val && (val.length >= len);
-
-                    
-                    return(
-                        <div>
-                            <Button  outline onClick={this.toggleModl}><span className='fa fa-pencil'>Submit Comment</span></Button>   
-                            <Modal isOpen={this.state.isModalOpn} toggle={this.toggleModl}>
-                            <ModalHeader toggle={this.toggleModl}>Submit Comment</ModalHeader>
-                            <ModalBody>
-                                <LocalForm onSubmit={(values) => this.hndlsubmit(values)}>
-                                <Row className="form-group">
-                                    <Label htmlFor="Rating" md={2}>Rating</Label>
-                                    <Col md={10}>
-                                        <Control.select model=".name" id="Rating" name="Rating" className="form-control">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                        </Control.select>
-                                    </Col>
-                                </Row>
-
-                                <Row className="form-group">
-                                    <Label htmlFor="name" md={2}>Your Name</Label>
-                                    <Col md={10}>
-                                        <Control.text model=".name" id="Yourname" name="YourName"
-                                            placeholder="Your Name"
-                                            className="form-control"
-                                            validators={{
-                                                required, minLength: minLength(3), maxLength: maxLength(15)
-                                            }}
-                                            />
-                                        <Errors
-                                            className="text-danger"
-                                            model=".name"
-                                            show="touched"
-                                            messages={{
-                                                required: 'Required',
-                                                minLength: 'Must be greater than 2 characters',
-                                                maxLength: 'Must be 15 characters or less'
-                                            }}
-                                        />
-                                        
-                                    </Col>
-                                </Row>
-                                <Row className="form-group">
-                                    <Label htmlFor="comments" md={2}>Comment</Label>
-                                    <Col md={10}>
-                                        <Control.textarea model=".name" id="comment" name="Comment"
-                                            rows="12" className="form-control"/>
-                                            
-                                    </Col>
-                                </Row>
-                                <Row className="form-group">
-                                <Col md={{size:10, offset: 2}}>
-                                                <Button type="submit" color="primary">
-                                                Submit
-                                                </Button>
-                                            </Col>
-                                </Row>
-                                
-
-                                </LocalForm>
-                            </ModalBody>
-                        </Modal>
-                        </div>
-                            );
-                        
-            }
-        };
-
-        const Dishdetail = (props) => {
-            if(props.dish!=null){
-            return(
-                <div className="container">
-                     <div className="row">
-            <Breadcrumb>
-                <BreadcrumbItem> <Link to='/menu'>Menu</Link> </BreadcrumbItem>
-                <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
-            </Breadcrumb>
-            <div className="col-12">
-                <h3>
-                    {props.dish.name}
-                </h3>
-                <hr />
+    const commentList = comments.map((item) => {
+        var date = new Date(Date.parse(item.date));
+        date.setDate(date.getDate()+1);
+        return (
+            <div key={item.id}>
+                <li>{item.comment}</li>
+                <br></br>
+                <li>-- {item.author} , {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).format(date)}</li>
+                <br></br>
             </div>
-            </div>
+        );
+    });
+    
+    return(
+        <div className="col-12 col-md-5 m-1">
+            <h4>Comments</h4>
+            <ul class="list-unstyled">
+                {commentList}
+                <CommentForm />
+            </ul>
+        </div>
+    );
+}
+
+class CommentForm extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            isModalOpen:false
+        }
+        this.toggleModal = this.toggleModal.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    toggleModal() {
+        this.setState({
+            isModalOpen: !this.state.isModalOpen
+        });
+    }
+
+    handleSubmit(values) {
+        this.toggleModal();
+        console.log("Current State is: " + JSON.stringify(values));
+        alert("Current State is: " + JSON.stringify(values));
+    }
+
+    render() {
+        return (
+            <React.Fragment>
+                <Button outline onClick={this.toggleModal}>
+                    <span className="fa fa-pencil fa-lg"></span> Submit Comment
+                </Button>
+                <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal} >
+                    <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
+                    <ModalBody>
+                        <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+                            <Row className="form-group">
+                                <Label htmlFor="rating" xs={12}>Rating</Label>
+                                <Col xs={12}>
+                                    <Control.select model=".rating" name="rating" className="form-control" defaultValue="1">
+                                        <option value="1" selected>1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </Control.select>
+                                </Col>
+                            </Row>
+                            <Row className="form-group">
+                                <Label htmlFor="yourname" xs={12}>Your Name</Label>
+                                <Col xs={12}>
+                                    <Control.text model=".yourname" id="yourname" name="yourname"
+                                        placeholder="Your Name" className="form-control" 
+                                        validators={{
+                                            minLength: minLength(3), maxLength: maxLength(15)
+                                        }} 
+                                    />
+                                    <Errors className="text-danger" model=".yourname" show="touched"
+                                        messages={{
+                                            minLength: 'Must be greater than 2 characters',
+                                            maxLength: 'Must be 15 characters or less'
+                                        }}
+                                    />
+                                </Col>
+                            </Row>
+                            <Row className="form-group">
+                                <Label htmlFor="comment" xs={12}>Comment</Label>
+                                <Col xs={12}>
+                                    <Control.textarea model=".comment" id="comment" name="comment"
+                                        rows="6" className="form-control" />
+                                </Col>
+                            </Row>
+                            <Row className="form-group">
+                                <Col xs={12}>
+                                    <Button type="submit" color="primary">Submit</Button>
+                                </Col>
+                            </Row>
+                        </LocalForm>
+                    </ModalBody>
+                </Modal>
+            </React.Fragment>
+        );
+    }
+
+}
+
+const DishDetail = (props) => {
+    if (props.dish != null) {
+        return (
+            <div className="container">
                 <div className="row">
-                    < RenderDish dish={props.dish}/> 
-                    < Rendercomments comments = {props.comments} />
+                    <Breadcrumb>
+                        <BreadcrumbItem><Link to='/menu'>Menu</Link></BreadcrumbItem>
+                        <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
+                    </Breadcrumb>
+                    <div className="col-12">
+                        <h3>{props.dish.name}</h3>
+                        <hr />
                     </div>
                 </div>
-            );}
-        else{
-            return(
-            <div></div>)
-        }}
-            
-            export default Dishdetail;
+                <div className="row">
+                    <RenderDish dish={props.dish} />
+                    <RenderComments comments={props.comments} />
+                </div>
+            </div> 
+        );
+    }
+
+    else {
+        return (
+            <div></div>
+        );
+    }
+}
+
+export default DishDetail;
